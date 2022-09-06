@@ -43,7 +43,7 @@ function get_play_functions(max_id: number) {
 
     return obj_return;
 }
-////Renderiza las dificultades
+////Renderizando las dificultades
 root.render(<div>
     <h2>Selecciona dificultad</h2>
     <button onClick={dif_0}>Facil</button>
@@ -54,7 +54,7 @@ root.render(<div>
 game.on("inicio", async(stats) => {
     root.render(<div>
         <h2>Juego piola</h2>
-        <div id="score">Score: {stats.score}    Level: {stats.level}</div>
+        <div id="score">Score: {stats.score}       Level: {stats.level}</div>
         <div id="board">{get_board(largo,ancho,stats.f_ids)}</div>
         <div id="question"></div>
     </div>);
@@ -68,7 +68,7 @@ game.on("ask", async(stats) =>{
     let play_f = get_play_functions(largo*ancho);
     root.render(<div>
         <h2>Juego piola</h2>
-        <div id="score">Score: {stats.score}    Level: {stats.level}</div>
+        <div id="score">Score: {stats.score}       Level: {stats.level}</div>
         <div id="board">{get_board(largo,ancho, get_obj_buttons(largo,ancho, play_f))}</div>
         <div id="question">Donde esta {stats.ask}?</div>
     </div>);
@@ -81,7 +81,7 @@ game.on("jugada", async (stats) => {
     }
     root.render(<div>
         <h2>Juego piola</h2>
-        <div id="score">Score: {stats.score}    Level: {stats.level}  CORRECTO!</div>
+        <div id="score">Score: {stats.score}       Level: {stats.level}  CORRECTO!</div>
         <div id="board">{get_board(largo,ancho, stats.f_ids)}</div>
         <div id="question">Memorizar</div>
     </div>);
