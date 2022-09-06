@@ -1,11 +1,16 @@
 {
     "facil": {
-        "5": {"tiempo": 3000, "largo": 3, "ancho": 3}
+        "5": {"tiempo": 4000, "largo": 3, "ancho": 3},
+        "9": {"tiempo": 3000, "largo": 4, "ancho": 4}
     },
     "normal": {
-        "3": {"tiempo": 3000, "largo": 3, "ancho": 3}
+        "3": {"tiempo": 4000, "largo": 3, "ancho": 3},
+        "5": {"tiempo": 3000, "largo": 3, "ancho": 3},
+        "9": {"tiempo": 3000, "largo": 4, "ancho": 4}
     },
     "dificil": {
-        "3": {"tiempo": 3000, "largo": 3, "ancho": 3}
+        "3": {"tiempo": 3000, "largo": 3, "ancho": 3},
+        "5": {"tiempo": 3000, "largo": 4, "ancho": 4},
+        "9": {"tiempo": 2000, "largo": 4, "ancho": 4}
     }
 }

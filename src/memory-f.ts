@@ -93,6 +93,8 @@ export class Memory2 extends Events{
 	#tiempo: number;
 	#arr_fru: string[];
 	#rptas_c: string[];
+	#possible_levels: number[]
+	#actual_obj_levels: {[key: number]: level_update_options}
 	constructor(dif?: number) {
 		super()
 		if(!dif) dif = 1;
@@ -120,7 +122,7 @@ export class Memory2 extends Events{
 		}
 
 		this.#f_dif = obj_dif[dif]
-
+		this.#possible_levels = []
 		this.ids = ids(this.largo!, this.ancho!, this.#f_dif)
 		let fta = ftable(this.ancho!, this.ids)
 		let table = fta.table;
@@ -137,9 +139,26 @@ export class Memory2 extends Events{
 			level: 0
 		}
 		this.in_game = false;
+		this.#actual_obj_levels = this.#load_levels();
 	}
 
-    //Actualiza la dificultar, solo se puede ejecutar antes del juego.
+    ///El nombre lo dice xd
+	iniciar() {
+        this.stats.level += 1
+		this.emit("inicio", this.stats)
+		let rpfunc = rptas(this.#arr_fru, this.ids)
+
+		this.stats.ask = rpfunc.ask
+		this.#rptas_c = rpfunc.rptas
+		this.stats.rptas = this.#rptas_c
+		this.in_game = true
+
+		setTimeout(async () => {
+			this.emit("ask", this.stats)
+		}, this.#tiempo)
+	}
+
+	//Actualiza la dificultar, solo se puede ejecutar antes del juego.
 	update_dif(new_dif: number) {
 		if(this.in_game) {
 			throw Error("No puedes establecer la dificultad en juego");
@@ -163,7 +182,7 @@ export class Memory2 extends Events{
 		}
 
 		this.#f_dif = obj_dif[new_dif]
-
+		this.#dif = new_dif
 		this.ids = ids(this.largo!, this.ancho!, this.#f_dif)
 		let fta = ftable(this.ancho!, this.ids)
 		let table = fta.table;
@@ -179,57 +198,44 @@ export class Memory2 extends Events{
 			score: 0,
 			level: 0
 		}
+		this.#actual_obj_levels = this.#load_levels();
 		this.in_game = false;
 	}
-    ///El nombre lo dice xd
-	iniciar() {
-        this.stats.level += 1
-		this.emit("inicio", this.stats)
-		let rpfunc = rptas(this.#arr_fru, this.ids)
 
-		this.stats.ask = rpfunc.ask
-		this.#rptas_c = rpfunc.rptas
-		this.stats.rptas = this.#rptas_c
-		this.in_game = true
-
-		setTimeout(async () => {
-			this.emit("ask", this.stats)
-		}, this.#tiempo)
-	}
-
-    #check_levels(lvl: number){
+    #load_levels(){
         ///Aun no se como hacer el sistema de niveles, me cago en todo
 		var obj_: {[key: number]:  "facil" | "normal" | "dificil"} = {
 			0: "facil",
 			1: "normal",
 			2: "dificil"
 		}
-		var dif_string = obj_[this.#dif];
-		var actual_obj_levels = levels[dif_string];
+		this.#possible_levels = []
+		var actual_obj_levels = levels[obj_[this.#dif]];
 		var new_obj_levels: {[key: number]: level_update_options} = {};
-		var possible_levels = [];
 		for(var [key, obj_lvl] of Object.entries(actual_obj_levels)) {
 			let parsed_key = parseInt(key);
-			possible_levels.push(parsed_key);
+			this.#possible_levels.push(parsed_key);
 			new_obj_levels[parsed_key] = obj_lvl;
 		}
+		return new_obj_levels;
+    }
 
-		if(possible_levels.includes(this.stats.level)) {
-			let obj_level = new_obj_levels[this.stats.level];
+	#level_change() {
+		if(this.#possible_levels.includes(this.stats.level)) {
+			var obj_level = this.#actual_obj_levels[this.stats.level];
 			this.#tiempo = obj_level.tiempo;
 			this.largo = obj_level.largo;
 			this.ancho = obj_level.ancho;
 		}
-    }
+	}
 
 	#updating_vars() {
 		this.stats.score += 5
 		this.stats.level += 1
-		this.#check_levels(this.stats.level)		
+		this.#level_change();
 		this.ids = ids(this.largo!, this.ancho!, this.#f_dif)
 		let f = ftable(this.ancho!, this.ids)
 		this.#arr_fru = f.f_arr
-
 		this.stats.table = f.table.join("")
 		let nfrp = rptas(this.#arr_fru, this.ids)
 		this.stats.ask = nfrp.ask

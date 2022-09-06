@@ -16,7 +16,7 @@ function update_dimensions() {
 }
 
 //// Funciones de dificultad.
-update_dimensions()
+update_dimensions();
 function dif_0() {
     game.update_dif(0);
     game.iniciar();
@@ -52,7 +52,7 @@ root.render(<div>
 </div>);
 
 game.on("inicio", async(stats) => {
-    update_dimensions()
+    update_dimensions();
     root.render(<div>
         <h2>Juego piola</h2>
         <div id="score">Score: {stats.score}       Level: {stats.level}</div>
@@ -62,7 +62,8 @@ game.on("inicio", async(stats) => {
 });
 
 game.on("ask", async(stats) =>{
-    update_dimensions()
+    update_dimensions();
+    console.log(stats.table);
     let play_f = get_play_functions(largo*ancho);
     root.render(<div>
         <h2>Juego piola</h2>
@@ -73,7 +74,7 @@ game.on("ask", async(stats) =>{
 });
 
 game.on("correcto", async (stats) => {
-    update_dimensions()
+    update_dimensions();
     root.render(<div>
         <h2>Juego piola</h2>
         <div id="score">Score: {stats.score}       Level: {stats.level}  CORRECTO!</div>
@@ -83,7 +84,7 @@ game.on("correcto", async (stats) => {
 });
 
 game.on("perdida", async (stats) => {
-    update_dimensions()
+    update_dimensions();
     root.render(<div>
         <h2>FIN DEL JUEGO</h2>
         <div id="score">Final Score: {stats.score}</div>
