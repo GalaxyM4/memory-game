@@ -1,0 +1,11 @@
+{
+    "facil": {
+        "5": {"tiempo": 3000, "largo": 3, "ancho": 3}
+    },
+    "normal": {
+        "3": {"tiempo": 3000, "largo": 3, "ancho": 3}
+    },
+    "dificil": {
+        "3": {"tiempo": 3000, "largo": 3, "ancho": 3}
+    }
+}

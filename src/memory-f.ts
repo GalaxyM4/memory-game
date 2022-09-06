@@ -1,4 +1,5 @@
 import Events from "events";
+import levels from "./levels.json";
 //Funciones especiales SI MUEVES ALGO ERES GEI
 function ids(largo: number, ancho: number, arr: any) {
 	let ids:any = {}
@@ -71,6 +72,12 @@ interface game_stats {
     level: number
 }
 
+interface level_update_options {
+	tiempo: number, 
+	largo: number, 
+	ancho: number
+}
+
 //Inicio de la clase osea fin de las funciones especiales
 export class Memory2 extends Events{
 	stats: game_stats;
@@ -78,6 +85,7 @@ export class Memory2 extends Events{
 	ancho: number | undefined;
 	ids: {[key: number]: string};
 	in_game: boolean;
+	#dif: number;
 	#frutas_f: string[];
 	#frutas_n: string[];
 	#frutas_d: string[];
@@ -88,7 +96,7 @@ export class Memory2 extends Events{
 	constructor(dif?: number) {
 		super()
 		if(!dif) dif = 1;
-
+		this.#dif = dif;
 		if(dif === 0) {
 		    this.largo = 2
 		    this.ancho = 2
@@ -188,52 +196,57 @@ export class Memory2 extends Events{
 			this.emit("ask", this.stats)
 		}, this.#tiempo)
 	}
+
     #check_levels(lvl: number){
         ///Aun no se como hacer el sistema de niveles, me cago en todo
-        const levels = [3, 5, 7, 9, 11];
+		var obj_: {[key: number]:  "facil" | "normal" | "dificil"} = {
+			0: "facil",
+			1: "normal",
+			2: "dificil"
+		}
+		var dif_string = obj_[this.#dif];
+		var actual_obj_levels = levels[dif_string];
+		var new_obj_levels: {[key: number]: level_update_options} = {};
+		var possible_levels = [];
+		for(var [key, obj_lvl] of Object.entries(actual_obj_levels)) {
+			let parsed_key = parseInt(key);
+			possible_levels.push(parsed_key);
+			new_obj_levels[parsed_key] = obj_lvl;
+		}
 
-        if(this.stats.level >= 2 && this.stats.dif === 0) {
-            this.#tiempo = 3000
-            this.largo = 3
-            this.ancho = 3
-        } 
+		if(possible_levels.includes(this.stats.level)) {
+			let obj_level = new_obj_levels[this.stats.level];
+			this.#tiempo = obj_level.tiempo;
+			this.largo = obj_level.largo;
+			this.ancho = obj_level.ancho;
+		}
+    }
 
-        if(this.stats.level >= 11) {
-            this.#tiempo = 1000
-        }else if(this.stats.level >= 9) {
-            this.#tiempo = 1500
-        }else if(this.stats.level >= 7) {
-            this.#tiempo = 2500
-        }else if(this.stats.level >= 5) {
-            this.#tiempo = 3500
-        }else if(this.stats.level >= 3) {
-            this.#tiempo = 4500
-        }
-    } 
-
-    ///Funcion pues para jugar.
-	jugar(num: number) {
+	#updating_vars() {
+		this.stats.score += 5
+		this.stats.level += 1
+		this.#check_levels(this.stats.level)		
 		this.ids = ids(this.largo!, this.ancho!, this.#f_dif)
 		let f = ftable(this.ancho!, this.ids)
 		this.#arr_fru = f.f_arr
 
-		if(this.#rptas_c.includes(num.toString())) {	
-			this.stats.score += 5
-			this.stats.level += 1
-			this.stats.table = f.table.join("")
-			let nfrp = rptas(this.#arr_fru, this.ids)
-		    this.stats.ask = nfrp.ask
-		    this.#rptas_c = nfrp.rptas
-			this.stats.rptas = nfrp.rptas
-			this.stats.f_ids = this.ids
-            
-            this.#check_levels(this.stats.level)
-			this.emit("jugada", this.stats)
+		this.stats.table = f.table.join("")
+		let nfrp = rptas(this.#arr_fru, this.ids)
+		this.stats.ask = nfrp.ask
+		this.#rptas_c = nfrp.rptas
+		this.stats.rptas = nfrp.rptas
+		this.stats.f_ids = this.ids
+		
+		this.emit("correcto", this.stats)
+		setTimeout(() => {
+			this.emit("ask", this.stats)
+		}, this.#tiempo)
+	}
 
-			setTimeout(() => {
-			    this.emit("ask", this.stats)
-			}, this.#tiempo)
-
+    ///Funcion pues para jugar.
+	jugar(num: number) {
+		if(this.#rptas_c.includes(num.toString())) {
+			this.#updating_vars()
 		}else{
 			this.emit("perdida", this.stats)
 		}
