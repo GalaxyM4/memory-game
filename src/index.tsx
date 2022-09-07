@@ -45,16 +45,19 @@ function get_play_functions(max_id: number) {
 }
 ///Renderizando las dificultades
 root.render(<div>
-    <h2>Selecciona dificultad</h2>
-    <button onClick={dif_0}>Facil</button>
-    <button onClick={dif_1}>Medio</button>
-    <button onClick={dif_2}>Dificil</button>
+    <h2 id="title">Selecciona dificultad</h2>
+    <div id="buttons_dif">
+        <button className="dif_button" onClick={dif_0}>Facil</button>
+        <button className="dif_button" onClick={dif_1}>Medio</button>
+        <button className="dif_button" onClick={dif_2}>Dificil</button>
+    </div>
+    
 </div>);
 
 game.on("inicio", async(stats) => {
     update_dimensions();
     root.render(<div>
-        <h2>Juego piola</h2>
+        <h2 id="title">Juego piola</h2>
         <div id="score">Score: {stats.score}       Level: {stats.level}</div>
         <div id="board">{get_board(largo,ancho,stats.f_ids)}</div>
         <div id="question"></div>
@@ -66,7 +69,7 @@ game.on("ask", async(stats) =>{
     console.log(stats.table);
     let play_f = get_play_functions(largo*ancho);
     root.render(<div>
-        <h2>Juego piola</h2>
+        <h2 id="title">Juego piola</h2>
         <div id="score">Score: {stats.score}       Level: {stats.level}</div>
         <div id="board">{get_board(largo,ancho, get_obj_buttons(largo,ancho, play_f))}</div>
         <div id="question">Donde esta {stats.ask}?</div>
@@ -76,7 +79,7 @@ game.on("ask", async(stats) =>{
 game.on("correcto", async (stats) => {
     update_dimensions();
     root.render(<div>
-        <h2>Juego piola</h2>
+        <h2 id="title">Juego piola</h2>
         <div id="score">Score: {stats.score}       Level: {stats.level}  CORRECTO!</div>
         <div id="board">{get_board(largo,ancho, stats.f_ids)}</div>
         <div id="question">Memorizar</div>
@@ -86,7 +89,7 @@ game.on("correcto", async (stats) => {
 game.on("perdida", async (stats) => {
     update_dimensions();
     root.render(<div>
-        <h2>FIN DEL JUEGO</h2>
+        <h2 id="title">FIN DEL JUEGO</h2>
         <div id="score">Final Score: {stats.score}</div>
         <div id="board">{get_board(largo,ancho, stats.f_ids)}</div>
         <div id="question">Respuestas: {stats.rptas.join(", ")}</div>

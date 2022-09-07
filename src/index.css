@@ -9,16 +9,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-#board {
-  padding-left: 50px;
-}
-
-#board th, td {
-  border:1px solid black;
-  padding: 10px;
-  font-size: 25px;
-}
-
 .q_buttons {
   background-color: #009e61;
   color: white;
@@ -36,4 +26,39 @@ code {
 
 .q_buttons:active {
   background-color: #364640;
+}
+
+#buttons_dif {
+  display: flex;
+  justify-content: center;
+}
+
+#score {
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+
+#question {
+  display: flex;
+  justify-content: center;
+  font-size: large;
+}
+
+#board {
+  padding-left: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+#title {
+  color: darkred;
+  justify-content: center;
+  display: flex;
+}
+
+#board th, td {
+  border:1px solid black;
+  padding: 10px;
+  font-size: 25px;
 }
