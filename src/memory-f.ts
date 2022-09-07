@@ -111,8 +111,9 @@ export class Memory2 extends Events{
         //Las posibles frutas que pueden salir en el juego.
 		this.#frutas_f = ["🍎","🍋","🍒","🍇"]
 		this.#frutas_n = ["🍎","🍋","🍒","🍇","🥥","🍌"]
-		this.#frutas_d = ["🍎","🍋","🍒","🍇","🥥","🍌","🍓","🍄"]
+		this.#frutas_d = ["🍎","🍋","🍒","🍇","🥥","🍌","🍓","🍐"]
 		this.#arr_fru = []
+
 		this.#rptas_c = []
 
 		var obj_dif: {[key: number]: string[]} = {
