@@ -33,10 +33,18 @@ code {
   justify-content: center;
 }
 
-#score {
+#info {
   display: flex;
   justify-content: center;
   font-size: medium;
+}
+
+#info li {
+  list-style-type: none;
+  float: left;
+  display: flex;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 #question {
@@ -46,13 +54,18 @@ code {
 }
 
 #board {
-  padding-left: 50px;
   display: flex;
   justify-content: center;
 }
 
 #title {
   color: darkred;
+  justify-content: center;
+  display: flex;
+}
+
+#title_c {
+  color: green;
   justify-content: center;
   display: flex;
 }
