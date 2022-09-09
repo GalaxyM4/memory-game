@@ -75,3 +75,8 @@ code {
   padding: 10px;
   font-size: 25px;
 }
+
+#build {
+  font-size: 13px;
+  color: rgb(80, 79, 79);
+}
