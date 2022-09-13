@@ -1,5 +1,6 @@
 import Events from "events";
-import levels from "./levels.json";
+import levels from "../levels.json";
+import {game_stats, level_update_options} from "./interfaces";
 //Funciones especiales SI MUEVES ALGO ERES GEI
 function ids(largo: number, ancho: number, arr: string[]) {
 	let ids:{[key: number]: string} = {};
@@ -61,23 +62,7 @@ function rptas(arr: string[], ids: {[key: number]: string}) {
 
 	return obj_ret;
 }
-//Algunas interfaces
-interface game_stats {
-    table: string,
-    f_ids: {[key: number]: string},
-    perdida: boolean,
-    dif: number,
-    ask: string | null,
-    rptas: string[],
-    score: number,
-    level: number
-}
 
-interface level_update_options {
-	tiempo: number, 
-	largo: number, 
-	ancho: number
-}
 
 //Inicio de la clase osea fin de las funciones especiales
 export class Memory2 extends Events{
