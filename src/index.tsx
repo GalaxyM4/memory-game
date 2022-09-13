@@ -183,6 +183,6 @@ root.render(
         <button className="dif_button" onClick={dif_1}>Medio</button>
         <button className="dif_button" onClick={dif_2}>Dificil</button>
     </div>
-    <p id="build">(build 4)</p>
+    <p id="build">(build 5)</p>
 </div>);
 reportWebVitals();
