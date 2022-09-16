@@ -70,7 +70,7 @@ export class Memory2 extends Events{
 	largo: number | undefined;
 	ancho: number | undefined;
 	ids: {[key: number]: string};
-	in_game: boolean;
+	game_status: "playing" | "end" | null;
 	#dif: number;
 	#frutas_f: string[];
 	#frutas_n: string[];
@@ -125,72 +125,12 @@ export class Memory2 extends Events{
 			score: 0,
 			level: 0
 		}
-		this.in_game = false;
+		this.game_status = null;
 		this.#actual_obj_levels = this.#load_levels();
 	}
-
-    ///El nombre lo dice xd
-	iniciar() {
-        this.stats.level += 1
-		this.emit("inicio", this.stats);
-		let rpfunc = rptas(this.#arr_fru, this.ids);
-
-		this.stats.ask = rpfunc.ask;
-		this.#rptas_c = rpfunc.rptas;
-		this.stats.rptas = this.#rptas_c;
-		this.in_game = true;
-
-		setTimeout(async () => {
-			this.emit("ask", this.stats)
-		}, this.#tiempo);
-	}
-
-	//Actualiza la dificultar, solo se puede ejecutar antes del juego.
-	update_dif(new_dif: number) {
-		if(this.in_game) {
-			throw Error("No puedes establecer la dificultad en juego");
-		}
-
-		if(new_dif === 0) {
-		    this.largo = 2
-		    this.ancho = 2
-		}else if(new_dif === 1 || new_dif === 2) {
-			this.largo = 3
-			this.ancho = 3
-		}
-		
-		this.#arr_fru = [];
-		this.#rptas_c = [];
-
-		var obj_dif: {[key: number]: string[]} = {
-			0: this.#frutas_f,
-		    1: this.#frutas_n,
-		    2: this.#frutas_d 
-		};
-
-		this.#f_dif = obj_dif[new_dif];
-		this.#dif = new_dif;
-		this.ids = ids(this.largo!, this.ancho!, this.#f_dif);
-		let fta = ftable(this.ancho!, this.ids);
-		let table = fta.table;
-		this.#arr_fru = fta.f_arr;
-		
-		this.stats = {
-			table: table.join(""),
-			f_ids: this.ids,
-			perdida: false,
-			dif: new_dif,
-			ask: null,
-			rptas: this.#rptas_c,
-			score: 0,
-			level: 0
-		};
-		this.#actual_obj_levels = this.#load_levels();
-		this.in_game = false;
-	}
-
+	//Parte funciones privadas.
     #load_levels(){
-        ///Aun no se como hacer el sistema de niveles, me cago en todo
+        ///ggez
 		var obj_: {[key: number]:  "facil" | "normal" | "dificil"} = {
 			0: "facil",
 			1: "normal",
@@ -229,18 +169,87 @@ export class Memory2 extends Events{
 		this.#rptas_c = nfrp.rptas;
 		this.stats.rptas = nfrp.rptas;
 		this.stats.f_ids = this.ids;
-		
-		this.emit("correcto", this.stats);
-		setTimeout(() => {
+	}
+
+    ///El nombre lo dice xd
+	iniciar() {
+        this.stats.level += 1
+		this.emit("inicio", this.stats);
+		let rpfunc = rptas(this.#arr_fru, this.ids);
+
+		this.stats.ask = rpfunc.ask;
+		this.#rptas_c = rpfunc.rptas;
+		this.stats.rptas = this.#rptas_c;
+		this.game_status = "playing";
+
+		setTimeout(async () => {
 			this.emit("ask", this.stats)
 		}, this.#tiempo);
+	}
+
+	//Actualiza la dificultar, solo se puede ejecutar antes del juego.
+	update_dif(new_dif: number) {
+		if(this.game_status === "playing") throw Error("No puedes establecer la dificultad en juego");
+		
+		if(new_dif === 0) {
+		    this.largo = 2
+		    this.ancho = 2
+		}else if(new_dif === 1 || new_dif === 2) {
+			this.largo = 3
+			this.ancho = 3
+		}
+		
+		this.#arr_fru = [];
+		this.#rptas_c = [];
+
+		var obj_dif: {[key: number]: string[]} = {
+			0: this.#frutas_f,
+		    1: this.#frutas_n,
+		    2: this.#frutas_d 
+		};
+
+		this.#f_dif = obj_dif[new_dif];
+		this.#dif = new_dif;
+		this.ids = ids(this.largo!, this.ancho!, this.#f_dif);
+		let fta = ftable(this.ancho!, this.ids);
+		let table = fta.table;
+		this.#arr_fru = fta.f_arr;
+		
+		this.stats = {
+			table: table.join(""),
+			f_ids: this.ids,
+			perdida: false,
+			dif: new_dif,
+			ask: null,
+			rptas: this.#rptas_c,
+			score: 0,
+			level: 0
+		};
+		this.#actual_obj_levels = this.#load_levels();
+	}
+
+	reset_game() {
+		if(this.game_status === "playing") throw Error("El juego tiene que haber terminado para reiniciarlo.");
+		this.#updating_vars();
+		this.stats.score = 0;
+		this.stats.level = 0;
+		this.#tiempo = 5000;
+		
+		this.update_dif(this.stats.dif);
+		this.iniciar();
+		this.emit("inicio", this.stats);
 	}
 
     ///Funcion pues para jugar.
 	jugar(num: number) {
 		if(this.#rptas_c.includes(num.toString())) {
 			this.#updating_vars();
+			this.emit("correcto", this.stats);
+			setTimeout(() => {
+				this.emit("ask", this.stats)
+			}, this.#tiempo);
 		}else{
+			this.game_status = "end";
 			this.emit("perdida", this.stats);
 		}
 	}

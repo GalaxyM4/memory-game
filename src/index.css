@@ -76,6 +76,11 @@ code {
   font-size: 25px;
 }
 
+#end_buttons {
+  justify-content: center;
+  display: flex;
+}
+
 #build {
   font-size: 13px;
   color: rgb(80, 79, 79);
