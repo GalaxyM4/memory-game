@@ -2,17 +2,14 @@ import ReactDOM from 'react-dom/client';
 import React from 'react';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {game_stats} from "./typescript/interfaces";
-
 //imports que yo cree
+import {game_stats, game_options} from "./typescript/interfaces";
+import FruitCanvas from './utils/canvas';
 import {Memory2}from './typescript/memory-f';
 import {get_board, get_obj_buttons} from "./utils/structures";
 import { TypingEffect } from './utils/effects';
-const root = ReactDOM.createRoot(
-    document.getElementById('root')!
-);
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 var largo: number, ancho: number;
-
 //Main Game
 interface state_main_game {
     board: JSX.Element | null;
@@ -24,7 +21,7 @@ interface state_main_game {
     info: {
         score: number,
         level: number,
-        ask?: string
+        ask?: any
     }
 };
 interface props_main_game {
@@ -61,6 +58,30 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
         return obj_return;
     }
 
+    #get_array_images() {
+        var arr_ez = [];
+        var arr_me = [];
+        var arr_ha = [];
+        for(var i = 1; i <= 8; i++) {
+            if(i <= 4) {
+                arr_ez.push(<FruitCanvas position={i}/>);
+                arr_me.push(<FruitCanvas position={i}/>);
+                arr_ha.push(<FruitCanvas position={i}/>);
+            }else if(i > 4 && i <= 6) {
+                arr_me.push(<FruitCanvas position={i}/>);
+                arr_ha.push(<FruitCanvas position={i}/>);
+            }else {
+                arr_ha.push(<FruitCanvas position={i}/>);
+            }
+        }
+        var obj_ret = {
+            0: arr_ez,
+            1: arr_me,
+            2: arr_ha
+        }; 
+        return obj_ret;
+    }
+
     ///Aca se viene funciones con los eventos del juego.
     async inicio(game_stats: game_stats) {
         this.#update_dimensions();
@@ -82,16 +103,17 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
     async ask(game_stats: game_stats) {
         this.#update_dimensions();
         let play_functions = this.#get_play_functions(largo*ancho);
-        let obj_functions = get_obj_buttons(largo,ancho, play_functions)
+        let obj_functions = get_obj_buttons(largo,ancho, play_functions);
+        var arr_ask = ["Donde esta ", game_stats.ask!, "?"];
         this.setState(() => {
             return {
-                title: "Primer nivel",
+                title: "Responde..",
                 board: get_board(largo,ancho, obj_functions),
                 id_title: "title",
                 info: {
                     score: game_stats.score,
                     level: game_stats.level, 
-                    ask: `Donde esta ${game_stats.ask!}?`
+                    ask: arr_ask
                 }
             };
         });
@@ -146,7 +168,11 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
 
     //Funcion tipica cuando se renderiza el juego
     componentDidMount() {
-        this.#game = new Memory2();
+        var game_opt: game_options = {
+            fruits_array: this.#get_array_images(),
+            initial_time: 5000
+        };
+        this.#game = new Memory2(game_opt);
         this.#game.update_dif(this.props.dif);
         this.#game.on("inicio", async (stats: game_stats) => {await this.inicio(stats)});
         this.#game.on("ask", async (stats: game_stats) => {await this.ask(stats)});

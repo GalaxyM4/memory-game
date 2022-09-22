@@ -1,6 +1,6 @@
 import Events from "events";
 import levels from "../levels.json";
-import {game_stats, level_update_options} from "./interfaces";
+import {game_stats, level_update_options, game_options} from "./interfaces";
 //Funciones especiales SI MUEVES ALGO ERES GEI
 function ids(largo: number, ancho: number, arr: string[]) {
 	let ids:{[key: number]: string} = {};
@@ -72,16 +72,16 @@ export class Memory2 extends Events{
 	ids: {[key: number]: string};
 	game_status: "playing" | "end" | null;
 	#dif: number;
-	#frutas_f: string[];
-	#frutas_n: string[];
-	#frutas_d: string[];
+	#frutas_f: any[];
+	#frutas_n: any[];
+	#frutas_d: any[];
 	#f_dif: string[];
 	#tiempo: number;
 	#arr_fru: string[];
 	#rptas_c: string[];
 	#possible_levels: number[]
 	#actual_obj_levels: {[key: number]: level_update_options}
-	constructor(dif?: number) {
+	constructor(options?: game_options,dif?: number) {
 		super()
 		if(!dif) dif = 1;
 		this.#dif = dif;
@@ -93,13 +93,20 @@ export class Memory2 extends Events{
 			this.ancho = 3
 		}
 
-		this.#tiempo = 5000;
-        //Las posibles frutas que pueden salir en el juego.
-		this.#frutas_f = ["🍎","🍋","🍒","🍇"];
-		this.#frutas_n = ["🍎","🍋","🍒","🍇","🥥","🍌"];
-		this.#frutas_d = ["🍎","🍋","🍒","🍇","🥥","🍌","🍓","🍐"];
-		this.#arr_fru = [];
-
+		//Configurando, las opciones.
+		if(options) {
+			this.#tiempo = options.initial_time;
+			this.#frutas_f = options.fruits_array[0];
+			this.#frutas_n = options.fruits_array[1];
+			this.#frutas_d = options.fruits_array[2];
+		}else {
+			this.#tiempo = 5000;
+			//Las posibles frutas que pueden salir en el juego.
+			this.#frutas_f = ["🍎","🍋","🍒","🍇"];
+			this.#frutas_n = ["🍎","🍋","🍒","🍇","🥥","🍌"];
+			this.#frutas_d = ["🍎","🍋","🍒","🍇","🥥","🍌","🍓","🍐"];
+			this.#arr_fru = [];
+		}
 		this.#rptas_c = [];
 
 		var obj_dif: {[key: number]: string[]} = {
