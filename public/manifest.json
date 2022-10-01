@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "uva192.png",
+      "src": "./images/uva192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "uva512.png",
+      "src": "./images/uva512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

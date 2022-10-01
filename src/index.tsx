@@ -88,8 +88,8 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
         this.setState(() => {
             return {
                 game_status: "playing",
-                title: "Primer nivel",
-                board: get_board(largo,ancho,game_stats.f_ids),
+                title: "Espera...",
+                board: <img src={`${process.env.PUBLIC_URL}/images/loading.gif`} alt="loading..."/>,
                 reset_button: undefined,
                 back_menu_button: undefined,
                 info: {
@@ -98,6 +98,15 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
                 }
             };
         });
+
+        setTimeout(() => {
+            this.setState(() => {
+                return {
+                    title: "Primer nivel",
+                    board: get_board(largo,ancho,game_stats.f_ids),
+                };
+            });
+        }, 900)
     }
 
     async ask(game_stats: game_stats) {
@@ -107,7 +116,7 @@ class MainGame extends React.Component<props_main_game, state_main_game> {
         var arr_ask = ["Donde esta ", game_stats.ask!, "?"];
         this.setState(() => {
             return {
-                title: "Responde..",
+                title: "Responde...",
                 board: get_board(largo,ancho, obj_functions),
                 id_title: "title",
                 info: {

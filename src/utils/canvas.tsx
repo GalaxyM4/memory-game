@@ -26,7 +26,7 @@ function FruitCanvas ({ width, height, position }: CanvasProps) {
         const ctx = canvas.getContext('2d');
         if(ctx === null) throw Error("Context no aviable.");
         var img_f = new Image();
-        img_f.src = process.env.PUBLIC_URL + "/fruits.png";
+        img_f.src = process.env.PUBLIC_URL + "/images/fruits.png";
         var x = 256*(coors.x - 1);
         var y = 256*(coors.y - 1);
 
@@ -37,7 +37,7 @@ function FruitCanvas ({ width, height, position }: CanvasProps) {
                 0, 0, 
                 width, height
             );
-        };    
+        };
     });
 
     return <canvas ref={canvasRef} height={height} width={width} />;
