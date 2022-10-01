@@ -235,7 +235,7 @@ class MainMenuGame extends React.Component<props_main_menu, {}> {
                 <button className="dif_button" onClick={() => {this.#play_dif(1)}}>Medio</button>
                 <button className="dif_button" onClick={() => {this.#play_dif(2)}}>Dificil</button>
             </div>
-            <p id="build">(build 7)</p>
+            <p id="build">(build 8)</p>
         </div>);
     }
 }
