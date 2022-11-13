@@ -1,0 +1,36 @@
+#buttons_dif  {
+    display: flex;
+    justify-content: center;
+}
+
+#buttons_dif button {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#footer {
+    display: flex;
+}
+
+#volume_config {
+    position: absolute;
+    right: 10px;
+    /*s*/
+    background: none;
+    border: 2px solid #1140c2;
+    border-radius: 3px;
+}
+
+#volume_config :hover {
+    cursor: pointer;
+}
+
+#mute {
+    position: absolute;
+    right: 10px;
+}
+
+#build {
+    font-size: 13px;
+    color: rgb(80, 79, 79);
+}

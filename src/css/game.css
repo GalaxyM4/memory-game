@@ -1,0 +1,49 @@
+.q_buttons {
+    background-color: #009e61;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 3px;
+    width: 35px;
+}
+
+.q_buttons:hover {
+    background-color: #00663f;
+}
+
+.q_buttons:active {
+    background-color: #364640;
+}
+
+#info, #board, #end_buttons  {
+    display: flex;
+    justify-content: center;
+}
+  
+#info li {
+    font-size: medium;
+    list-style-type: none;
+    float: left;
+    display: flex;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+  
+#question {
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+}
+  
+#board th, td {
+    border:1px solid black;
+    padding: 10px;
+    font-size: 25px;
+}
+
+#board table {
+    border-collapse: collapse;
+}
